@@ -241,10 +241,10 @@ export default function ProductPreview() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 w-max max-w-[calc(100vw-2.5rem)] px-6 py-3 bg-panel/80 backdrop-blur-xl border border-border/50 rounded-xl shadow-lg"
+            className="absolute -bottom-8 left-1/2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 w-max max-w-[calc(100vw-2.5rem)] px-6 py-3 bg-panel/80 backdrop-blur-xl border border-border/50 rounded-xl shadow-lg"
           >
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <span className="px-2 py-1 bg-brand-purple/15 text-brand-purple rounded-full text-xs font-medium">Real-time</span>
