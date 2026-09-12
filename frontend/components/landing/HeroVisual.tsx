@@ -20,6 +20,18 @@ const methodColors: Record<EndpointNode['method'], string> = {
   DELETE: '#EF4444',
 };
 
+const BRAND_PURPLE = '#8B5CF6';
+const BRAND_CYAN = '#22D3EE';
+
+/*
+ * Five API endpoints arranged evenly around the center.
+ *
+ * The SVG uses a 600 × 600 coordinate system.
+ * Center = (300, 300)
+ *
+ * The nodes are positioned around the center with
+ * equal angular spacing and approximately equal radius.
+ */
 const endpointNodes: EndpointNode[] = [
   {
     id: 'users',
@@ -27,52 +39,41 @@ const endpointNodes: EndpointNode[] = [
     label: '/users',
     x: 300,
     y: 80,
-    delay: 0.2,
+    delay: 0.15,
   },
   {
     id: 'posts',
     method: 'POST',
     label: '/posts',
-    x: 475,
-    y: 175,
-    delay: 0.3,
+    x: 510,
+    y: 232,
+    delay: 0.25,
   },
   {
     id: 'comments',
     method: 'PUT',
     label: '/comments',
-    x: 500,
-    y: 350,
-    delay: 0.4,
+    x: 430,
+    y: 475,
+    delay: 0.35,
   },
   {
     id: 'albums',
     method: 'PATCH',
     label: '/albums',
-    x: 400,
-    y: 500,
-    delay: 0.5,
+    x: 170,
+    y: 475,
+    delay: 0.45,
   },
   {
     id: 'photos',
     method: 'DELETE',
     label: '/photos',
-    x: 200,
-    y: 500,
-    delay: 0.6,
-  },
-  {
-    id: 'auth',
-    method: 'POST',
-    label: '/auth',
-    x: 100,
-    y: 350,
-    delay: 0.7,
+    x: 90,
+    y: 232,
+    delay: 0.55,
   },
 ];
-
-const BRAND_PURPLE = '#8B5CF6';
-const BRAND_CYAN = '#22D3EE';
 
 export default function HeroVisual() {
   const [mounted, setMounted] = useState(false);
@@ -99,9 +100,7 @@ export default function HeroVisual() {
   }, []);
 
   /*
-   * Simple loading state.
-   * Keeps the initial render lightweight and avoids
-   * hydration-related animation issues.
+   * Lightweight loading state.
    */
   if (!mounted) {
     return (
@@ -133,18 +132,29 @@ export default function HeroVisual() {
         aria-hidden="true"
       />
 
-      {/* Large subtle ambient glow */}
+      {/* Ambient purple glow */}
       <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-                   w-72 h-72 rounded-full
-                   bg-brand-purple/10 blur-3xl"
+        className="
+          absolute left-1/2 top-1/2
+          -translate-x-1/2 -translate-y-1/2
+          w-72 h-72
+          rounded-full
+          bg-brand-purple/10
+          blur-3xl
+        "
         aria-hidden="true"
       />
 
+      {/* Ambient cyan glow */}
       <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-                   w-56 h-56 rounded-full
-                   bg-brand-cyan/5 blur-3xl"
+        className="
+          absolute left-1/2 top-1/2
+          -translate-x-1/2 -translate-y-1/2
+          w-56 h-56
+          rounded-full
+          bg-brand-cyan/5
+          blur-3xl
+        "
         aria-hidden="true"
       />
 
@@ -159,7 +169,7 @@ export default function HeroVisual() {
         aria-hidden="true"
       >
         <defs>
-          {/* Purple → Cyan gradient */}
+          {/* Connection gradient */}
           <linearGradient
             id="connectionGradient"
             x1="300"
@@ -173,10 +183,17 @@ export default function HeroVisual() {
               stopColor={BRAND_PURPLE}
               stopOpacity="0.55"
             />
+
+            <stop
+              offset="0.5"
+              stopColor={BRAND_CYAN}
+              stopOpacity="0.3"
+            />
+
             <stop
               offset="1"
               stopColor={BRAND_CYAN}
-              stopOpacity="0.15"
+              stopOpacity="0.12"
             />
           </linearGradient>
 
@@ -187,11 +204,13 @@ export default function HeroVisual() {
               stopColor={BRAND_PURPLE}
               stopOpacity="0.22"
             />
+
             <stop
               offset="0.5"
               stopColor={BRAND_CYAN}
               stopOpacity="0.08"
             />
+
             <stop
               offset="1"
               stopColor={BRAND_CYAN}
@@ -200,7 +219,10 @@ export default function HeroVisual() {
           </radialGradient>
         </defs>
 
-        {/* Central glow */}
+        {/* =====================================================
+            CENTRAL GLOW
+        ===================================================== */}
+
         <circle
           cx="300"
           cy="300"
@@ -209,35 +231,45 @@ export default function HeroVisual() {
         />
 
         {/* =====================================================
-            CONNECTIONS
+            CONNECTION LINES
         ===================================================== */}
 
-        {endpointNodes.map((node) => (
-          <motion.path
-            key={`connection-${node.id}`}
-            d={`M 300 300 Q ${
-              (300 + node.x) / 2
-            } ${(300 + node.y) / 2} ${node.x} ${node.y}`}
-            stroke="url(#connectionGradient)"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            initial={{
-              pathLength: 0,
-              opacity: 0,
-            }}
-            animate={{
-              pathLength: 1,
-              opacity: 1,
-            }}
-            transition={{
-              duration: 0.9,
-              delay: node.delay,
-              ease: 'easeOut',
-            }}
-          />
-        ))}
+        {endpointNodes.map((node) => {
+          const controlX = (300 + node.x) / 2;
+          const controlY = (300 + node.y) / 2;
 
-        {/* Small connection dots */}
+          return (
+            <motion.path
+              key={`connection-${node.id}`}
+              d={`
+                M 300 300
+                Q ${controlX} ${controlY}
+                ${node.x} ${node.y}
+              `}
+              stroke="url(#connectionGradient)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              initial={{
+                pathLength: 0,
+                opacity: 0,
+              }}
+              animate={{
+                pathLength: 1,
+                opacity: 1,
+              }}
+              transition={{
+                duration: 0.8,
+                delay: node.delay,
+                ease: 'easeOut',
+              }}
+            />
+          );
+        })}
+
+        {/* =====================================================
+            CONNECTION DOTS
+        ===================================================== */}
+
         {endpointNodes.map((node) => (
           <circle
             key={`dot-${node.id}`}
@@ -304,11 +336,15 @@ export default function HeroVisual() {
 
           {/* Core */}
           <div
-            className="relative w-28 h-28 rounded-2xl
-                       border border-white/10
-                       bg-gradient-to-br from-brand-purple to-brand-cyan
-                       flex items-center justify-center
-                       shadow-2xl"
+            className="
+              relative
+              w-28 h-28
+              rounded-2xl
+              border border-white/10
+              bg-gradient-to-br from-brand-purple to-brand-cyan
+              flex items-center justify-center
+              shadow-2xl
+            "
             style={{
               boxShadow: `
                 0 0 35px ${BRAND_PURPLE}45,
@@ -318,8 +354,12 @@ export default function HeroVisual() {
           >
             {/* Inner glass layer */}
             <div
-              className="absolute inset-[2px] rounded-[14px]
-                         bg-[#111827]/20 backdrop-blur-sm"
+              className="
+                absolute inset-[2px]
+                rounded-[14px]
+                bg-[#111827]/20
+                backdrop-blur-sm
+              "
             />
 
             <div className="relative z-10 flex flex-col items-center">
@@ -345,12 +385,10 @@ export default function HeroVisual() {
         /*
          * IMPORTANT:
          *
-         * This outer div controls POSITION.
+         * This outer div controls the exact position.
+         * Framer Motion does not control positioning.
          *
-         * Framer Motion is only used inside it for
-         * opacity / scale / floating animation.
-         *
-         * This prevents transform conflicts.
+         * This avoids transform conflicts.
          */
 
         return (
@@ -363,6 +401,7 @@ export default function HeroVisual() {
               transform: 'translate(-50%, -50%)',
             }}
           >
+            {/* Entrance animation */}
             <motion.div
               initial={{
                 opacity: 0,
@@ -373,12 +412,12 @@ export default function HeroVisual() {
                 scale: 1,
               }}
               transition={{
-                duration: 0.6,
+                duration: 0.55,
                 delay: node.delay,
                 ease: 'easeOut',
               }}
             >
-              {/* Floating wrapper */}
+              {/* Floating animation */}
               <motion.div
                 animate={
                   prefersReducedMotion
@@ -409,7 +448,7 @@ export default function HeroVisual() {
                         }
                   }
                   transition={{
-                    duration: 0.2,
+                    duration: 0.18,
                   }}
                   className="relative"
                 >
@@ -424,11 +463,15 @@ export default function HeroVisual() {
 
                   {/* Method */}
                   <div
-                    className="relative w-14 h-14 rounded-xl
-                               flex items-center justify-center
-                               text-white text-xs font-bold
-                               border border-white/10
-                               backdrop-blur-sm"
+                    className="
+                      relative
+                      w-14 h-14
+                      rounded-xl
+                      flex items-center justify-center
+                      text-white text-xs font-bold
+                      border border-white/10
+                      backdrop-blur-sm
+                    "
                     style={{
                       backgroundColor: color,
                       boxShadow: `0 0 25px ${color}35`,
@@ -443,15 +486,22 @@ export default function HeroVisual() {
                 ================================================= */}
 
                 <div
-                  className="px-2.5 py-1 rounded-md
-                             bg-[#111827]/80
-                             border border-[#263247]
-                             backdrop-blur-md
-                             whitespace-nowrap"
+                  className="
+                    px-2.5 py-1
+                    rounded-md
+                    bg-[#111827]/80
+                    border border-[#263247]
+                    backdrop-blur-md
+                    whitespace-nowrap
+                  "
                 >
                   <span
-                    className="text-[#94A3B8] text-[11px]
-                               font-mono tracking-tight"
+                    className="
+                      text-[#94A3B8]
+                      text-[11px]
+                      font-mono
+                      tracking-tight
+                    "
                   >
                     {node.label}
                   </span>
@@ -491,12 +541,15 @@ export default function HeroVisual() {
       ========================================================= */}
 
       <div
-        className="absolute inset-0 rounded-3xl
-                   bg-gradient-to-t
-                   from-[#0B0F19]/35
-                   via-transparent
-                   to-transparent
-                   pointer-events-none"
+        className="
+          absolute inset-0
+          rounded-3xl
+          bg-gradient-to-t
+          from-[#0B0F19]/35
+          via-transparent
+          to-transparent
+          pointer-events-none
+        "
         aria-hidden="true"
       />
     </div>
