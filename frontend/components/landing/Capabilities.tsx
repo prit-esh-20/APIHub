@@ -74,14 +74,14 @@ const capabilities = [
 
 export default function Capabilities() {
   return (
-    <section id="features" className="relative py-20 lg:py-28" aria-labelledby="capabilities-heading">
+    <section id="features" className="relative py-16 lg:py-20" aria-labelledby="capabilities-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-16"
+          className="text-center mb-10 lg:mb-12"
         >
           <span className="px-3 py-1 bg-brand-purple/15 text-brand-purple text-sm font-medium rounded-full border border-brand-purple/30 mb-4 inline-block">
             Core Capabilities
@@ -103,22 +103,15 @@ export default function Capabilities() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.1 }}
-              className={`group relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:shadow-black/20 ${capability.gradient} ${capability.border} bg-panel/50 backdrop-blur-sm`}
+              className={`relative p-6 rounded-2xl border transition-all duration-300 ${capability.gradient} ${capability.border} bg-panel/50 backdrop-blur-sm`}
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-transparent via-transparent to-brand-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" aria-hidden="true" />
-
               <div className="relative z-10">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 ${capability.iconColor} ${capability.gradient} ${capability.border}`}>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${capability.iconColor} ${capability.gradient} ${capability.border}`}>
                   <capability.icon className="w-6 h-6" aria-hidden="true" />
                 </div>
 
                 <h3 className="text-xl font-semibold text-text-primary mb-3">{capability.title}</h3>
                 <p className="text-text-secondary leading-relaxed">{capability.description}</p>
-
-                <div
-                  className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-${capability.color} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                  aria-hidden="true"
-                />
               </div>
             </motion.article>
           ))}
@@ -129,7 +122,7 @@ export default function Capabilities() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.6 }}
-          className="mt-16 text-center"
+          className="mt-10 lg:mt-12 text-center"
         >
           <p className="text-text-muted mb-6">
             Testing, Automation, Mocking, Documentation, and Monitoring are in active development.

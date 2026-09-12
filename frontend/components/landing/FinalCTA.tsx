@@ -6,7 +6,7 @@ import { ArrowRight, Rocket } from 'lucide-react';
 
 export default function FinalCTA() {
   return (
-    <section className="relative py-20 lg:py-28" aria-labelledby="cta-heading">
+    <section className="relative py-16 lg:py-20" aria-labelledby="cta-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -85,7 +85,7 @@ export default function FinalCTA() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="mt-16 grid grid-cols-3 gap-8 text-center"
+          className="mt-10 lg:mt-12 grid grid-cols-3 gap-4 sm:gap-8 text-center overflow-hidden"
         >
           <div className="p-6 bg-panel/50 backdrop-blur-sm border border-border/50 rounded-2xl">
             <div className="text-3xl sm:text-4xl font-bold text-brand-purple mb-2">10K+</div>

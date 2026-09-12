@@ -123,15 +123,6 @@ export default function HeroVisual() {
       role="img"
       aria-label="APIHub API network visualization showing connected API endpoints"
     >
-      {/* =========================================================
-          BACKGROUND
-      ========================================================= */}
-
-      <div
-        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-purple/5 via-transparent to-brand-cyan/5"
-        aria-hidden="true"
-      />
-
       {/* Ambient purple glow */}
       <div
         className="

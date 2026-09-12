@@ -19,14 +19,14 @@ export default function ProductPreview() {
   const [method, setMethod] = useState<'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'>('GET');
 
   return (
-    <section id="product-preview" className="relative py-20 lg:py-28" aria-labelledby="preview-heading">
+    <section id="product-preview" className="relative py-16 lg:py-20" aria-labelledby="preview-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-16"
+          className="text-center mb-10 lg:mb-12"
         >
           <h2 id="preview-heading" className="text-3xl sm:text-4xl font-bold text-text-primary mb-4">
             APIHub Workspace Preview
@@ -244,13 +244,13 @@ export default function ProductPreview() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 px-6 py-3 bg-panel/80 backdrop-blur-xl border border-border/50 rounded-xl shadow-lg"
+            className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 w-max max-w-[calc(100vw-2.5rem)] px-6 py-3 bg-panel/80 backdrop-blur-xl border border-border/50 rounded-xl shadow-lg"
           >
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <span className="px-2 py-1 bg-brand-purple/15 text-brand-purple rounded-full text-xs font-medium">Real-time</span>
               <span>Request executed • Response received • Ready to save</span>
             </div>
-            <div className="w-px h-6 bg-border/50" aria-hidden="true" />
+            <div className="hidden sm:block w-px h-6 bg-border/50" aria-hidden="true" />
             <button className="btn-ghost text-sm gap-2">
               <Copy className="w-4 h-4" aria-hidden="true" />
               Save to Collection
