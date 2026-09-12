@@ -1,18 +1,18 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface EndpointNode {
   id: string;
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   label: string;
-  angle: number;
-  distance: number;
+  x: number;
+  y: number;
   delay: number;
 }
 
-const methodColors: Record<string, string> = {
+const methodColors: Record<EndpointNode['method'], string> = {
   GET: '#22C55E',
   POST: '#F59E0B',
   PUT: '#3B82F6',
@@ -21,12 +21,54 @@ const methodColors: Record<string, string> = {
 };
 
 const endpointNodes: EndpointNode[] = [
-  { id: 'users', method: 'GET', label: '/users', angle: -Math.PI / 2, distance: 160, delay: 0.2 },
-  { id: 'posts', method: 'POST', label: '/posts', angle: -Math.PI / 4, distance: 180, delay: 0.3 },
-  { id: 'comments', method: 'PUT', label: '/comments', angle: 0, distance: 170, delay: 0.4 },
-  { id: 'albums', method: 'PATCH', label: '/albums', angle: Math.PI / 4, distance: 180, delay: 0.5 },
-  { id: 'photos', method: 'DELETE', label: '/photos', angle: Math.PI / 2, distance: 160, delay: 0.6 },
-  { id: 'auth', method: 'POST', label: '/auth', angle: Math.PI * 0.75, distance: 190, delay: 0.7 },
+  {
+    id: 'users',
+    method: 'GET',
+    label: '/users',
+    x: 300,
+    y: 80,
+    delay: 0.2,
+  },
+  {
+    id: 'posts',
+    method: 'POST',
+    label: '/posts',
+    x: 475,
+    y: 175,
+    delay: 0.3,
+  },
+  {
+    id: 'comments',
+    method: 'PUT',
+    label: '/comments',
+    x: 500,
+    y: 350,
+    delay: 0.4,
+  },
+  {
+    id: 'albums',
+    method: 'PATCH',
+    label: '/albums',
+    x: 400,
+    y: 500,
+    delay: 0.5,
+  },
+  {
+    id: 'photos',
+    method: 'DELETE',
+    label: '/photos',
+    x: 200,
+    y: 500,
+    delay: 0.6,
+  },
+  {
+    id: 'auth',
+    method: 'POST',
+    label: '/auth',
+    x: 100,
+    y: 350,
+    delay: 0.7,
+  },
 ];
 
 const BRAND_PURPLE = '#8B5CF6';
@@ -35,127 +77,42 @@ const BRAND_CYAN = '#22D3EE';
 export default function HeroVisual() {
   const [mounted, setMounted] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const targetMouseRef = useRef({ x: 0, y: 0 });
-  const animationFrameRef = useRef<number>();
 
   useEffect(() => {
     setMounted(true);
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const mediaQuery = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
     setPrefersReducedMotion(mediaQuery.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
-  }, []);
 
-  useEffect(() => {
-    if (!canvasRef.current || prefersReducedMotion) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    let width = 0;
-    let height = 0;
-
-    const resize = () => {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      width = rect.width;
-      height = rect.height;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.scale(dpr, dpr);
+    const handleChange = (event: MediaQueryListEvent) => {
+      setPrefersReducedMotion(event.matches);
     };
 
-    resize();
-    window.addEventListener('resize', resize);
-
-    const drawConnections = () => {
-      if (!ctx) return;
-      ctx.clearRect(0, 0, width, height);
-
-      const centerX = width / 2;
-      const centerY = height / 2;
-
-      const mouseX = mouseRef.current.x;
-      const mouseY = mouseRef.current.y;
-
-      endpointNodes.forEach((node) => {
-        const nodeX = centerX + Math.cos(node.angle) * node.distance + mouseX * 0.08;
-        const nodeY = centerY + Math.sin(node.angle) * node.distance + mouseY * 0.08;
-
-        const gradient = ctx.createLinearGradient(centerX, centerY, nodeX, nodeY);
-        gradient.addColorStop(0, `${BRAND_PURPLE}40`);
-        gradient.addColorStop(0.5, `${BRAND_CYAN}30`);
-        gradient.addColorStop(1, `${methodColors[node.method]}40`);
-
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.quadraticCurveTo(
-          centerX + (nodeX - centerX) * 0.5 + Math.sin(Date.now() * 0.001 + node.angle) * 15,
-          centerY + (nodeY - centerY) * 0.5 + Math.cos(Date.now() * 0.001 + node.angle) * 10,
-          nodeX,
-          nodeY
-        );
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      });
-
-      const pulseRadius = 40 + Math.sin(Date.now() * 0.003) * 8;
-      const pulseGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, pulseRadius);
-      pulseGradient.addColorStop(0, `${BRAND_PURPLE}20`);
-      pulseGradient.addColorStop(0.5, `${BRAND_CYAN}10`);
-      pulseGradient.addColorStop(1, 'transparent');
-
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, pulseRadius, 0, Math.PI * 2);
-      ctx.fillStyle = pulseGradient;
-      ctx.fill();
-    };
-
-    const animate = () => {
-      if (prefersReducedMotion) return;
-      mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * 0.08;
-      mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * 0.08;
-      drawConnections();
-      animationFrameRef.current = requestAnimationFrame(animate);
-    };
-
-    animate();
+    mediaQuery.addEventListener('change', handleChange);
 
     return () => {
-      window.removeEventListener('resize', resize);
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
+      mediaQuery.removeEventListener('change', handleChange);
     };
-  }, [prefersReducedMotion]);
+  }, []);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    targetMouseRef.current.x = (e.clientX - rect.left - rect.width / 2) * 0.5;
-    targetMouseRef.current.y = (e.clientY - rect.top - rect.height / 2) * 0.5;
-  };
-
+  /*
+   * Simple loading state.
+   * Keeps the initial render lightweight and avoids
+   * hydration-related animation issues.
+   */
   if (!mounted) {
     return (
       <div
-        className="relative w-full aspect-square max-w-[500px] mx-auto"
+        className="relative w-full aspect-square max-w-[600px] mx-auto"
         aria-hidden="true"
-        role="img"
-        aria-label="APIHub API network visualization"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/10 via-transparent to-brand-cyan/10 rounded-3xl flex items-center justify-center" />
-        <div className="relative z-10 flex items-center justify-center h-full">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-purple to-brand-cyan flex items-center justify-center animate-pulse" />
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-purple/5 via-transparent to-brand-cyan/5" />
+
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-brand-purple to-brand-cyan opacity-80" />
         </div>
       </div>
     );
@@ -163,94 +120,383 @@ export default function HeroVisual() {
 
   return (
     <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => {
-        targetMouseRef.current = { x: 0, y: 0 };
-      }}
       className="relative w-full aspect-square max-w-[600px] mx-auto"
-      aria-hidden="true"
       role="img"
-      aria-label="APIHub API network visualization showing connected endpoints"
+      aria-label="APIHub API network visualization showing connected API endpoints"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/5 via-transparent to-brand-cyan/5 rounded-3xl" aria-hidden="true" />
+      {/* =========================================================
+          BACKGROUND
+      ========================================================= */}
 
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0"
+      <div
+        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-purple/5 via-transparent to-brand-cyan/5"
         aria-hidden="true"
       />
 
-      <div className="relative z-10 w-full h-full" style={{ perspective: '1000px' }}>
+      {/* Large subtle ambient glow */}
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                   w-72 h-72 rounded-full
+                   bg-brand-purple/10 blur-3xl"
+        aria-hidden="true"
+      />
+
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                   w-56 h-56 rounded-full
+                   bg-brand-cyan/5 blur-3xl"
+        aria-hidden="true"
+      />
+
+      {/* =========================================================
+          SVG CONNECTION NETWORK
+      ========================================================= */}
+
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        viewBox="0 0 600 600"
+        fill="none"
+        aria-hidden="true"
+      >
+        <defs>
+          {/* Purple → Cyan gradient */}
+          <linearGradient
+            id="connectionGradient"
+            x1="300"
+            y1="300"
+            x2="500"
+            y2="100"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop
+              offset="0"
+              stopColor={BRAND_PURPLE}
+              stopOpacity="0.55"
+            />
+            <stop
+              offset="1"
+              stopColor={BRAND_CYAN}
+              stopOpacity="0.15"
+            />
+          </linearGradient>
+
+          {/* Center glow */}
+          <radialGradient id="centerGlow">
+            <stop
+              offset="0"
+              stopColor={BRAND_PURPLE}
+              stopOpacity="0.22"
+            />
+            <stop
+              offset="0.5"
+              stopColor={BRAND_CYAN}
+              stopOpacity="0.08"
+            />
+            <stop
+              offset="1"
+              stopColor={BRAND_CYAN}
+              stopOpacity="0"
+            />
+          </radialGradient>
+        </defs>
+
+        {/* Central glow */}
+        <circle
+          cx="300"
+          cy="300"
+          r="120"
+          fill="url(#centerGlow)"
+        />
+
+        {/* =====================================================
+            CONNECTIONS
+        ===================================================== */}
+
+        {endpointNodes.map((node) => (
+          <motion.path
+            key={`connection-${node.id}`}
+            d={`M 300 300 Q ${
+              (300 + node.x) / 2
+            } ${(300 + node.y) / 2} ${node.x} ${node.y}`}
+            stroke="url(#connectionGradient)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            initial={{
+              pathLength: 0,
+              opacity: 0,
+            }}
+            animate={{
+              pathLength: 1,
+              opacity: 1,
+            }}
+            transition={{
+              duration: 0.9,
+              delay: node.delay,
+              ease: 'easeOut',
+            }}
+          />
+        ))}
+
+        {/* Small connection dots */}
+        {endpointNodes.map((node) => (
+          <circle
+            key={`dot-${node.id}`}
+            cx={node.x}
+            cy={node.y}
+            r="3"
+            fill={methodColors[node.method]}
+            opacity="0.5"
+          />
+        ))}
+      </svg>
+
+      {/* =========================================================
+          CENTRAL APIHUB CORE
+      ========================================================= */}
+
+      <div
+        className="absolute left-1/2 top-1/2"
+        style={{
+          transform: 'translate(-50%, -50%)',
+          perspective: '1000px',
+        }}
+      >
         <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          animate={prefersReducedMotion ? {} : {
-            scale: [1, 1.03, 1],
-            boxShadow: [
-              '0 0 40px #8B5CF640, 0 0 80px #22D3EE20',
-              '0 0 60px #8B5CF660, 0 0 100px #22D3EE30',
-              '0 0 40px #8B5CF640, 0 0 80px #22D3EE20',
-            ],
+          initial={{
+            opacity: 0,
+            scale: 0.8,
           }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ transformStyle: 'preserve-3d' }}
+          animate={{
+            opacity: 1,
+            scale: prefersReducedMotion
+              ? 1
+              : [1, 1.025, 1],
+          }}
+          transition={
+            prefersReducedMotion
+              ? {
+                  duration: 0.5,
+                }
+              : {
+                  opacity: {
+                    duration: 0.6,
+                  },
+                  scale: {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  },
+                }
+          }
+          className="relative"
+          style={{
+            transformStyle: 'preserve-3d',
+          }}
         >
-          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-brand-purple to-brand-cyan flex items-center justify-center relative">
-            <span className="text-white font-bold text-2xl tracking-tight">API</span>
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-purple to-brand-cyan opacity-30 blur-xl" />
+          {/* Outer glow */}
+          <div
+            className="absolute -inset-8 rounded-[2rem] blur-2xl opacity-30"
+            style={{
+              background: `linear-gradient(135deg, ${BRAND_PURPLE}, ${BRAND_CYAN})`,
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Core */}
+          <div
+            className="relative w-28 h-28 rounded-2xl
+                       border border-white/10
+                       bg-gradient-to-br from-brand-purple to-brand-cyan
+                       flex items-center justify-center
+                       shadow-2xl"
+            style={{
+              boxShadow: `
+                0 0 35px ${BRAND_PURPLE}45,
+                0 0 70px ${BRAND_CYAN}20
+              `,
+            }}
+          >
+            {/* Inner glass layer */}
+            <div
+              className="absolute inset-[2px] rounded-[14px]
+                         bg-[#111827]/20 backdrop-blur-sm"
+            />
+
+            <div className="relative z-10 flex flex-col items-center">
+              <span className="text-white text-2xl font-bold tracking-tight">
+                API
+              </span>
+
+              <span className="text-white/70 text-[10px] font-medium tracking-[0.2em] uppercase mt-1">
+                Hub
+              </span>
+            </div>
           </div>
         </motion.div>
+      </div>
 
-        {endpointNodes.map((node) => {
-          const color = methodColors[node.method];
-          const x = Math.cos(node.angle) * node.distance;
-          const y = Math.sin(node.angle) * node.distance;
+      {/* =========================================================
+          ENDPOINT NODES
+      ========================================================= */}
 
-          return (
+      {endpointNodes.map((node) => {
+        const color = methodColors[node.method];
+
+        /*
+         * IMPORTANT:
+         *
+         * This outer div controls POSITION.
+         *
+         * Framer Motion is only used inside it for
+         * opacity / scale / floating animation.
+         *
+         * This prevents transform conflicts.
+         */
+
+        return (
+          <div
+            key={node.id}
+            className="absolute"
+            style={{
+              left: `${(node.x / 600) * 100}%`,
+              top: `${(node.y / 600) * 100}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
             <motion.div
-              key={node.id}
-              className="absolute flex flex-col items-center gap-1.5"
-              style={{
-                left: '50%',
-                top: '50%',
-                transform: `translate(-50%, -50%) translate3d(${x}px, ${y}px, 0)`,
-                transformStyle: 'preserve-3d',
+              initial={{
+                opacity: 0,
+                scale: 0.65,
               }}
-              initial={{ opacity: 0, scale: 0.6 }}
               animate={{
                 opacity: 1,
                 scale: 1,
-                y: prefersReducedMotion ? 0 : [0, -6, 6, 0],
               }}
               transition={{
                 duration: 0.6,
                 delay: node.delay,
                 ease: 'easeOut',
-                y: prefersReducedMotion ? undefined : { duration: 3, repeat: Infinity, delay: node.delay, ease: 'easeInOut' },
               }}
             >
+              {/* Floating wrapper */}
               <motion.div
-                className="flex flex-col items-center gap-1"
-                animate={prefersReducedMotion ? {} : { scale: [1, 1.04, 1] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: node.delay }}
+                animate={
+                  prefersReducedMotion
+                    ? {}
+                    : {
+                        y: [0, -5, 0, 5, 0],
+                      }
+                }
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  delay: node.delay,
+                  ease: 'easeInOut',
+                }}
+                className="flex flex-col items-center gap-2"
               >
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center relative text-white font-semibold text-xs"
-                  style={{ backgroundColor: color, boxShadow: `0 0 30px ${color}60` }}
+                {/* =================================================
+                    METHOD CARD
+                ================================================= */}
+
+                <motion.div
+                  whileHover={
+                    prefersReducedMotion
+                      ? {}
+                      : {
+                          scale: 1.08,
+                          y: -2,
+                        }
+                  }
+                  transition={{
+                    duration: 0.2,
+                  }}
+                  className="relative"
                 >
-                  {node.method}
+                  {/* Glow */}
+                  <div
+                    className="absolute inset-0 rounded-xl blur-lg opacity-30"
+                    style={{
+                      backgroundColor: color,
+                    }}
+                    aria-hidden="true"
+                  />
+
+                  {/* Method */}
+                  <div
+                    className="relative w-14 h-14 rounded-xl
+                               flex items-center justify-center
+                               text-white text-xs font-bold
+                               border border-white/10
+                               backdrop-blur-sm"
+                    style={{
+                      backgroundColor: color,
+                      boxShadow: `0 0 25px ${color}35`,
+                    }}
+                  >
+                    {node.method}
+                  </div>
+                </motion.div>
+
+                {/* =================================================
+                    ENDPOINT LABEL
+                ================================================= */}
+
+                <div
+                  className="px-2.5 py-1 rounded-md
+                             bg-[#111827]/80
+                             border border-[#263247]
+                             backdrop-blur-md
+                             whitespace-nowrap"
+                >
+                  <span
+                    className="text-[#94A3B8] text-[11px]
+                               font-mono tracking-tight"
+                  >
+                    {node.label}
+                  </span>
                 </div>
-                <span className="text-text-secondary text-xs font-mono whitespace-nowrap px-2 py-0.5 rounded bg-panel/80 backdrop-blur-sm border border-border/50">
-                  {node.label}
-                </span>
               </motion.div>
             </motion.div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
+
+      {/* =========================================================
+          DECORATIVE MICRO DOTS
+      ========================================================= */}
 
       <div
-        className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent pointer-events-none"
+        className="absolute top-[17%] left-[17%] w-1.5 h-1.5 rounded-full bg-brand-purple/40"
+        aria-hidden="true"
+      />
+
+      <div
+        className="absolute top-[27%] right-[15%] w-1 h-1 rounded-full bg-brand-cyan/50"
+        aria-hidden="true"
+      />
+
+      <div
+        className="absolute bottom-[22%] right-[20%] w-1.5 h-1.5 rounded-full bg-brand-purple/30"
+        aria-hidden="true"
+      />
+
+      <div
+        className="absolute bottom-[17%] left-[28%] w-1 h-1 rounded-full bg-brand-cyan/40"
+        aria-hidden="true"
+      />
+
+      {/* =========================================================
+          SUBTLE VIGNETTE
+      ========================================================= */}
+
+      <div
+        className="absolute inset-0 rounded-3xl
+                   bg-gradient-to-t
+                   from-[#0B0F19]/35
+                   via-transparent
+                   to-transparent
+                   pointer-events-none"
         aria-hidden="true"
       />
     </div>
