@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Geist Mono', monospace;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-text-primary font-sans antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  ::selection {
+    @apply bg-brand-purple/30 text-text-primary;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-muted;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-purple text-white hover:bg-brand-purple/90 active:bg-brand-purple hover:shadow-lg hover:shadow-brand-purple/25;
+  }
+
+  .btn-secondary {
+    @apply btn bg-panel-elevated text-text-primary border border-border hover:bg-panel-elevated/80 hover:border-brand-purple/50;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-text-secondary hover:text-text-primary hover:bg-panel-elevated/50;
+  }
+
+  .btn-danger {
+    @apply btn bg-error text-white hover:bg-error/90 active:bg-error hover:shadow-lg hover:shadow-error/25;
+  }
+
+  .input {
+    @apply w-full px-4 py-2.5 bg-panel-elevated border border-border text-text-primary placeholder-text-muted rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-purple focus:border-transparent;
+  }
+
+  .input-error {
+    @apply border-error focus:ring-error;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-text-secondary mb-1.5;
+  }
+
+  .card {
+    @apply bg-panel border border-border rounded-xl overflow-hidden transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply card hover:border-brand-purple/50 hover:shadow-xl hover:shadow-brand-purple/10;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .method-badge {
+    @apply badge font-mono;
+  }
+
+  .method-get {
+    @apply method-badge bg-http-get/15 text-http-get border border-http-get/30;
+  }
+
+  .method-post {
+    @apply method-badge bg-http-post/15 text-http-post border border-http-post/30;
+  }
+
+  .method-put {
+    @apply method-badge bg-http-put/15 text-http-put border border-http-put/30;
+  }
+
+  .method-patch {
+    @apply method-badge bg-http-patch/15 text-http-patch border border-http-patch/30;
+  }
+
+  .method-delete {
+    @apply method-badge bg-http-delete/15 text-http-delete border border-http-delete/30;
+  }
+
+  .status-badge {
+    @apply badge;
+  }
+
+  .status-success {
+    @apply status-badge bg-success/15 text-success border border-success/30;
+  }
+
+  .status-warning {
+    @apply status-badge bg-warning/15 text-warning border border-warning/30;
+  }
+
+  .status-error {
+    @apply status-badge bg-error/15 text-error border border-error/30;
+  }
+
+  .status-info {
+    @apply status-badge bg-info/15 text-info border border-info/30;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:text-text-primary hover:bg-panel-elevated transition-all duration-200;
+  }
+
+  .sidebar-link-active {
+    @apply sidebar-link bg-brand-purple/15 text-brand-purple border border-brand-purple/30;
+  }
+
+  .glass-panel {
+    @apply bg-panel/80 backdrop-blur-xl border border-border/50;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-purple to-brand-cyan bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .animate-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
