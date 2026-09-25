@@ -17,7 +17,7 @@ export default function FinalCTA() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-brand-purple/10 via-transparent to-brand-cyan/10 rounded-3xl blur-3xl pointer-events-none" aria-hidden="true" />
 
-          <div className="relative bg-panel/50 backdrop-blur-xl border border-border/50 rounded-3xl p-10 lg:p-16 max-w-3xl mx-auto">
+          <div className="relative bg-panel/50 backdrop-blur-xl border border-border/50 rounded-3xl p-8 lg:p-14 max-w-3xl mx-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -85,7 +85,7 @@ export default function FinalCTA() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="mt-10 lg:mt-12 grid grid-cols-3 gap-4 sm:gap-8 text-center overflow-hidden"
+          className="mt-10 lg:mt-12 grid sm:grid-cols-3 grid-cols-1 gap-4 sm:gap-8 text-center overflow-hidden"
         >
           <div className="p-6 bg-panel/50 backdrop-blur-sm border border-border/50 rounded-2xl">
             <div className="text-3xl sm:text-4xl font-bold text-brand-purple mb-2">10K+</div>

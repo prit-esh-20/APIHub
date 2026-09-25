@@ -82,7 +82,7 @@ export default function Lifecycle() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-10 lg:mb-12"
+          className="text-center mb-8 lg:mb-10"
         >
           <span className="px-3 py-1 bg-brand-purple/15 text-brand-purple text-sm font-medium rounded-full border border-brand-purple/30 mb-4 inline-block">
             API Lifecycle
@@ -95,46 +95,56 @@ export default function Lifecycle() {
           </p>
         </motion.div>
 
-        <div className="relative mt-10 lg:mt-12">
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-brand-purple/30 to-transparent -translate-x-1/2" aria-hidden="true" />
+        {/* Timeline — dedicated visual area. Spine aligns with the icon column center:
+            left-8 (2rem) matches the 4rem icon chip center on mobile, and the middle
+            grid column is centered on desktop. */}
+        <div className="relative">
+          <div
+            className="absolute left-8 lg:left-1/2 top-2 bottom-2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand-purple/30 to-transparent"
+            aria-hidden="true"
+          />
 
-          <div className="relative max-w-2xl mx-auto flex flex-col items-stretch gap-8 sm:gap-10">
+          <ol className="relative max-w-2xl mx-auto space-y-5 lg:space-y-0">
             {stages.map((stage, index) => {
               const isLeft = index % 2 === 0;
-              const delay = index * 0.1;
+              const delay = index * 0.08;
 
               return (
-                <motion.div
+                <motion.li
                   key={stage.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.6, delay, ease: 'easeOut' }}
-                  className={`relative px-8 ${isLeft ? 'lg:text-right' : ''}`}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.5, delay, ease: 'easeOut' }}
+                  className="relative flex items-start gap-5 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-x-8 lg:py-3"
                 >
-                  <div className="flex lg:flex-row items-start gap-6">
-                    <div
-                      className={`flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center ${stage.bgColor} ${stage.borderColor}`}
-                    >
-                      <stage.icon className={`w-7 h-7 ${stage.textColor}`} aria-hidden="true" />
-                    </div>
-
-                    <div className={`flex-1 ${isLeft ? 'text-right pr-4' : 'pl-4'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-xl font-semibold text-text-primary">{stage.title}</h3>
-                        {stage.comingSoon && (
-                          <span className="px-2 py-0.5 text-xs font-medium bg-warning/15 text-warning border border-warning/30 rounded-full">
-                            Coming Soon
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-text-secondary">{stage.description}</p>
-                    </div>
+                  <div
+                    className={`flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center ${stage.bgColor} lg:col-start-2 lg:row-start-1 lg:justify-self-center`}
+                  >
+                    <stage.icon className={`w-7 h-7 ${stage.textColor}`} aria-hidden="true" />
                   </div>
-                </motion.div>
+
+                  <div
+                    className={`flex-1 min-w-0 ${
+                      isLeft
+                        ? 'lg:col-start-1 lg:row-start-1 lg:text-right'
+                        : 'lg:col-start-3 lg:row-start-1 lg:text-left'
+                    }`}
+                  >
+                    <div className={`flex items-center gap-2 mb-1.5 ${isLeft ? 'lg:justify-end' : ''}`}>
+                      <h3 className="text-xl font-semibold text-text-primary">{stage.title}</h3>
+                      {stage.comingSoon && (
+                        <span className="px-2 py-0.5 text-xs font-medium bg-warning/15 text-warning border border-warning/30 rounded-full">
+                          Coming Soon
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-text-secondary">{stage.description}</p>
+                  </div>
+                </motion.li>
               );
             })}
-          </div>
+          </ol>
         </div>
 
         <motion.div
@@ -142,9 +152,9 @@ export default function Lifecycle() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.8 }}
-          className="mt-12 lg:mt-14 text-center"
+          className="mt-10 lg:mt-12 text-center"
         >
-          <p className="text-text-muted mb-4">
+          <p className="text-text-muted mb-4 max-w-2xl mx-auto">
             Each stage seamlessly connects to the next — the output of one becomes the input of another.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-mono text-text-muted">
@@ -155,7 +165,7 @@ export default function Lifecycle() {
               </span>
             ))}
           </div>
-          <div className="mt-10 max-w-2xl mx-auto">
+          <div className="mt-6 lg:mt-8 max-w-xl mx-auto">
             <TestComponent />
           </div>
         </motion.div>

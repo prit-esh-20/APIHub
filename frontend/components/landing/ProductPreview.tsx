@@ -26,7 +26,7 @@ export default function ProductPreview() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-10 lg:mb-12"
+          className="text-center mb-8 lg:mb-10"
         >
           <h2 id="preview-heading" className="text-3xl sm:text-4xl font-bold text-text-primary mb-4">
             APIHub Workspace Preview
@@ -41,7 +41,6 @@ export default function ProductPreview() {
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
-          className="relative"
         >
           <div className="absolute -inset-4 bg-gradient-to-r from-brand-purple/10 to-brand-cyan/10 rounded-3xl blur-3xl opacity-50 pointer-events-none" aria-hidden="true" />
 
@@ -241,10 +240,11 @@ export default function ProductPreview() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20, x: '-50%' }}
-            animate={{ opacity: 1, y: 0, x: '-50%' }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="absolute -bottom-8 left-1/2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 w-max max-w-[calc(100vw-2.5rem)] px-6 py-3 bg-panel/80 backdrop-blur-xl border border-border/50 rounded-xl shadow-lg"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 px-6 py-3 bg-panel/80 backdrop-blur-xl border border-border/50 rounded-xl shadow-lg mx-auto w-fit max-w-full"
           >
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <span className="px-2 py-1 bg-brand-purple/15 text-brand-purple rounded-full text-xs font-medium">Real-time</span>

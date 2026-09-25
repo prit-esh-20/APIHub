@@ -103,7 +103,7 @@ export default function Capabilities() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.1 }}
-              className={`relative p-6 rounded-2xl border transition-all duration-300 ${capability.gradient} ${capability.border} bg-panel/50 backdrop-blur-sm`}
+              className={`relative h-full p-6 rounded-2xl border transition-all duration-300 ${capability.gradient} ${capability.border} bg-panel/50 backdrop-blur-sm`}
             >
               <div className="relative z-10">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${capability.iconColor} ${capability.gradient} ${capability.border}`}>

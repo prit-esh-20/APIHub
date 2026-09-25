@@ -43,8 +43,8 @@ export default function Footer() {
   return (
     <footer className="bg-sidebar/50 border-t border-border/50" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-10 lg:mb-12">
-          <div className="col-span-2 md:col-span-2 lg:col-span-1">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-10 mb-10 lg:mb-12 md:grid-cols-4 lg:grid-cols-5">
+          <div className="col-span-2 md:col-span-4 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 text-text-primary hover:opacity-80 transition-opacity mb-4" aria-label="APIHub Home">
               <svg className="w-8 h-8 text-brand-purple" viewBox="0 0 32 32" fill="none" aria-hidden="true">
                 <rect width="32" height="32" rx="8" className="fill-brand-purple" />
